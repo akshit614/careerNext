@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Toggle } from "@/components/ui/toggle";
+import Header from "@/components/ui/Header";
 
 
 const geistSans = Geist({
@@ -31,8 +32,13 @@ export default function RootLayout({ children }) {
             enableSystem
             disableTransitionOnChange
           >
+            <Header></Header>
           <main> {children} </main>
-          
+          <footer className="py-10 bg-muted/50 rounded">
+            <div className="container text-center mx-auto  text-xl">
+              <p>Made with love by Divyanshu</p>
+            </div>
+          </footer>
         </ThemeProvider>
           
       </body>
