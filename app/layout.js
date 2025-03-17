@@ -3,6 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Toggle } from "@/components/ui/toggle";
 import Header from "@/components/ui/Header";
+import { ClerkProvider } from "@clerk/nextjs";
 
 
 const geistSans = Geist({
@@ -22,16 +23,17 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <ClerkProvider>
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+        >
         <ThemeProvider
             attribute="class"
             defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
-          >
+            >
             <Header></Header>
           <main> {children} </main>
           <footer className="py-10 bg-muted/50 rounded">
@@ -43,5 +45,6 @@ export default function RootLayout({ children }) {
           
       </body>
     </html>
+    </ClerkProvider>
   );
 }
