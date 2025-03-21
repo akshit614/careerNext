@@ -8,13 +8,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger, 
 } 
   from './dropdown-menu'
-import { Graduate } from 'next/font/google'
-
 
 const Header = () => {
   return (
@@ -42,19 +38,19 @@ const Header = () => {
 
           <DropdownMenuContent>
             <DropdownMenuItem>
-              <Link href={'/'} className='flex gap-3 items-center'>
+              <Link href={'/resume'} className='flex gap-3 items-center'>
               <FileText/> 
               <span>Build Resume</span> 
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href={'/'} className='flex gap-3 items-center'>
+              <Link href={'/ai-cover-letter'} className='flex gap-3 items-center'>
                 <PenBox/> 
                 <span>Cover letter</span> 
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href={'/'} className='flex gap-3 items-center'>
+              <Link href={'/interview'} className='flex gap-3 items-center'>
                 <GraduationCap/> 
                 <span>Interview Prep</span> 
               </Link>
