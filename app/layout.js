@@ -1,10 +1,9 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
-import { Toggle } from "@/components/ui/toggle";
-import Header from "@/components/ui/Header";
+// import { Toggle } from "@/components/ui/toggle";
+import { Header } from "@/components/ui/header";
 import { ClerkProvider } from "@clerk/nextjs";
-
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
