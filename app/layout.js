@@ -40,7 +40,7 @@ export default function RootLayout({ children }) {
           <main className="min-h-screen"> {children} </main>
           <footer className="py-10 bg-muted/50 rounded">
             <div className="container text-center mx-auto  text-xl text-gray-200">
-              <p>Made with love by Divyanshu</p>
+              <p>Made with 💗 by Divyanshu</p>
             </div>
           </footer>
           
