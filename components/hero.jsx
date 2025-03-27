@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useRef } from 'react'
-import { Button } from './button'
+import { Button } from './ui/button'
 import Link from 'next/link'
 import Image from 'next/image'
 
