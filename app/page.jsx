@@ -2,12 +2,16 @@ import { Button } from "@/components/ui/button";
 import { HeroSection } from "@/components/ui/hero";
 import { features } from "@/data/features";
 import { howItWorks } from "@/data/howItWorks";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card"
 import { testimonial } from "@/data/testimonial";
 import Image from "next/image";
+import { Card, CardContent,} from "@/components/ui/card"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+import { faqs } from "@/data/faqs";
 
 export default function Home() {
   return (
@@ -123,6 +127,31 @@ export default function Home() {
               </Card>
             );
           })}
+        </div>
+      </div>
+      </section>
+
+      <section className="w-full py-12 md:py-24 lg:md-32 bg-background">
+      <div className="container mx-auto px-4 md:px-6">
+        <div className="text-center mx-auto max-w-3xl mb-12">
+          <h2 className="text-3xl font-bold mb-4">
+            Frequently Asked Question
+          </h2>
+          <p className="text-muted-foreground">Find Answers To Most Asked Questions</p>
+        </div>
+        <div className="max-w-6xl mx-auto">
+          <Accordion type="single" collapsible className="w-full" >
+          {faqs.map((item,index) => {
+            return (
+              <AccordionItem key={index} value = {`item-${index}`}>
+                <AccordionTrigger>{item.question}</AccordionTrigger>
+                <AccordionContent>
+                  {item.answer}
+                </AccordionContent>
+              </AccordionItem>
+            )
+          })}
+          </Accordion>
         </div>
       </div>
       </section>
