@@ -12,6 +12,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { faqs } from "@/data/faqs";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 export default function Home() {
   return (
@@ -152,6 +154,27 @@ export default function Home() {
             )
           })}
           </Accordion>
+        </div>
+      </div>
+      </section>
+
+      <section className="w-full ">
+      <div className="mx-auto gradient py-24 rounded-2xl">
+        <div className="flex flex-col items-center justify-center space-y-4 text-center mx-auto max-w-3xl">
+          <h2 className="text-3xl font-bold tracking-tighter text-primary-foreground sm:text-4xl md:text-5xl">
+            Ready To Accelerate Your Career
+          </h2>
+          <p className="mx-auto max-w-[600px] text-primary-foreground/80 md:text-xl">
+            Join thousands of professionals who are advancing their careers
+            with AI powered guidance
+          </p>
+
+          <Link href={'/dashboard'} passHref>
+            <Button size="lg" variant="secondary" className="h-11 mt-5 animate-bounce">
+              Start Your Journey Today <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
+
         </div>
       </div>
       </section>
