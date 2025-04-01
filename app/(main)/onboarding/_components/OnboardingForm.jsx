@@ -1,9 +1,8 @@
 "use client"
 
 import { onboardingSchema } from '@/app/lib/schema'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card"
@@ -11,12 +10,23 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
+import { zodResolver } from '@hookform/resolvers/zod'
+import useFetch from '@/hooks/useFetch'
+import { updateUser } from '@/actions/user'
+import { toast } from 'sonner'
+import { Loader } from 'lucide-react'
 
 
 const OnboardingForm = ({industries}) => {
 
   const [selectedIndustry, setSelectedIndustry] = useState(null)
   const router = useRouter()
+
+  const {
+    data: updateResult,
+    loading : updateLoading,
+    fn : updateUserFn
+  } = useFetch(updateUser)
 
   const {
     register,
@@ -30,9 +40,27 @@ const OnboardingForm = ({industries}) => {
 
   const watchIndustry = watch("industry");
   const onSubmit = async(values) => {
-    console.log(values);
-    
+    try {
+      const formattedIndustry = `${values.industry}-${values.subIndustry.toLowerCase().replace(/ /g, "-")}`
+      console.log(values);
+      
+      await updateUserFn({
+        ...values,
+        industry : formattedIndustry
+      })
+    } catch (error) {
+      console.error("Onboarding error ", error);
+    }
   }
+
+  useEffect(()=>{
+    if(updateResult?.success && !updateLoading){
+      toast.success("Profile completed successfully!");
+      router.push("/dashboard");
+      router.refresh();
+      
+    }
+  },[updateLoading,updateResult])
 
   return (
     <div className='flex justify-center items-center bg-background'>
@@ -114,8 +142,16 @@ const OnboardingForm = ({industries}) => {
                 )}
             </div>
 
-            <Button type="submit" className="w-full">
-                Complete Setup  
+            <Button type="submit" className="w-full" disabled={updateLoading}>
+              { updateLoading ? (
+                <>
+                  <Loader className='mr-2 h-4 w-4 animate-spin' /> Saving...
+                </>
+              ) : (
+                "Complete Setup"  
+              )
+
+              }
             </Button>
           </form>
         </CardContent>
