@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import { Button } from './ui/button'
-import { ChevronDown, FileText, GraduationCap, LayoutDashboard, PenBox } from 'lucide-react'
+import { ChevronDown, FileText, GraduationCap, LayoutDashboard, PenBox, ChartNoAxesCombined } from 'lucide-react'
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -35,6 +35,7 @@ async function Header() {
         <DropdownMenu>
           <DropdownMenuTrigger>
           <Button> 
+            <ChartNoAxesCombined/>
             <span className='hidden md:block'>Growth Tools</span> 
             <ChevronDown/> 
             </Button> 
