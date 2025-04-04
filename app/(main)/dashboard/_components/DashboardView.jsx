@@ -1,9 +1,12 @@
+"use client";
+
 import { Badge } from '@/components/ui/badge';
 import { format, formatDistanceToNow } from 'date-fns';
 import { Brain, BriefcaseIcon, LineChart, TrendingDown, TrendingUp } from 'lucide-react';
 import React from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from '@/components/ui/progress';
+import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip,  ResponsiveContainer } from 'recharts';
 
 
 const DashboardView = ({insights}) => {
@@ -90,7 +93,7 @@ const DashboardView = ({insights}) => {
 
         <Card >
           <CardHeader className="flex flex-row items-center justify-between space-x-0 pb-2">
-            <CardTitle className="text-sm font-medium">Market Outlook</CardTitle>
+            <CardTitle className="text-sm font-medium">Top Skills</CardTitle>
             <Brain className='h-4 w-4 text-muted-foreground'/>
           </CardHeader>
           <CardContent>
@@ -103,8 +106,45 @@ const DashboardView = ({insights}) => {
             </div>
           </CardContent>
         </Card>
+        </div>
 
-      </div>
+        <Card className="col-span-4">
+          <CardHeader >
+            <CardTitle >Salary ranges by role</CardTitle>
+            <CardDescription>Displaying minimum maximum and median salaries in thousands</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="h-[400px]">
+              <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={salaryData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip content={({payload, active, label}) => {
+                  if (active && payload && payload.length) {
+                    return (
+                      <div className='bg-background rounded-lg p-2 shadow-md border border-amber-100'>
+                        <p className='font-medium'>{label}</p>
+                        {payload.map((item) => (
+                          <p className='text-sm' key={item.name}>
+                            {item.name}: ${item.value}K
+                          </p>
+                        ))}
+                      </div>
+                    );
+                  } 
+                  return null;
+                }}/>
+                <Bar dataKey="min" fill="#94a3b8" name="Min Salary (K)" />
+                <Bar dataKey="median" fill="#64748b" name="Median Salary (K)" />
+                <Bar dataKey="max" fill="#475569" name="Max Salary (K)" />
+              </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+      
 
     </div>
   )
