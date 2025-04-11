@@ -35,44 +35,60 @@ const Quiz = () => {
         setAnswers(new Array(quizData.length).fill(null)) ;
     }
   },[quizData]);
+  
+  const handleAnswer = (answer) => {
+    const newAnswers = [...answers];
+    newAnswers[currentQuestion] = answer;
+    setAnswers(newAnswers);
+  }
 
-    if (!quizData) {
-        return  <div className='flex justify-center pt-10'>
-        <Card className="mx-2 md:max-w-3xl">
-        <CardHeader>
-          <CardTitle>Ready To Test Your Knowledge</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className='text-muted-foreground'>
-            This quiz contains 10 questions specific to your industry and skills. 
-            Take your time and choose the right answer for each question.
-          </p>
-        </CardContent>
-        <CardFooter>
-          <Button className="w-full" onClick={generateQuizFn}>Start Quiz</Button>
-        </CardFooter>
-      </Card>
-        </div>
+  const handleNext = () => {
+    if(currentQuestion < quizData.length - 1) {
+      setcurrentQuestion(currentQuestion + 1)
+      setShowExplanation(false)
     }
-
-    if(generatingQuiz) {
-        return <BarLoader className='mt-4' width={"100%"} color='gray'/>
+    else {
+      finishQuiz()
     }
+  }
 
-    
+  const finishQuiz = () => {}
 
-    const question = quizData[currentQuestion];
+  if(generatingQuiz) {
+    return <BarLoader className='mt-4' width={"100%"} color='gray'/>
+  }
+
+  if (!quizData) {
+      return  <div className='flex justify-center pt-10'>
+      <Card className="mx-2 md:max-w-3xl">
+      <CardHeader>
+        <CardTitle>Ready To Test Your Knowledge</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className='text-muted-foreground'>
+          This quiz contains 10 questions specific to your industry and skills. 
+          Take your time and choose the right answer for each question.
+        </p>
+      </CardContent>
+      <CardFooter>
+        <Button className="w-full" onClick={generateQuizFn}>Start Quiz</Button>
+      </CardFooter>
+    </Card>
+      </div>
+  }
+
+  const question = quizData[currentQuestion];
 
   return (
 
-    <Card className="mx-2 md:max-w-3xl">
+    <Card className="mx-2">
         <CardHeader>
           <CardTitle>Question {currentQuestion + 1} of {quizData.length}</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className=" ">
         <p>Q. {question.question}</p>
 
-        <RadioGroup defaultValue="option-one" className="pl-5 pt-2"> 
+        <RadioGroup onValueChange={handleAnswer} value={answers[currentQuestion]}  className="space-y-2"> 
             {question.options.map((option,index) => {
                 return (
                     <div className="flex items-center space-x-2 p-1" key={index}>
@@ -83,10 +99,25 @@ const Quiz = () => {
             })}
         
         </RadioGroup>
-
+            {showExplanation && 
+              <div className='mt-4 p-4 rounded-lg bg-muted'>
+                <p className='font-medium'>Explanation : </p>
+                <p className='text-muted-foreground '>{question.explanation}</p>
+              </div>
+            }
         </CardContent>
         <CardFooter>
-          <Button className="w-full" onClick={generateQuizFn}>Next Question</Button>
+
+          { !showExplanation && 
+            <Button onClick={() => setShowExplanation(true)} variant="outline" disabled={!answers[currentQuestion]}>
+              Show Explanation
+            </Button>
+          }
+           
+          <Button className="ml-auto" onClick={handleNext}>
+            {currentQuestion < quizData.length - 1 ? "Next Question" : "Submit Quiz"}
+          </Button> 
+          
         </CardFooter>
       </Card>
   )
