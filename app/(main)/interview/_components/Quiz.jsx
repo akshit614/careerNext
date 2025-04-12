@@ -16,6 +16,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { BarLoader } from 'react-spinners';
 import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
+import QuizResult from './QuizResult';
 
 
 const Quiz = () => {
@@ -72,6 +74,14 @@ const Quiz = () => {
     return (count / quizData.length) * 100;
   }
 
+  const startNewQuiz = () => {
+    setAnswers([])
+    setcurrentQuestion(0)
+    setShowExplanation(false)
+    generateQuizFn()
+    setResultData(null)
+  }
+
   const finishQuiz = async() => {
     const score = calculateScore();
     try {
@@ -84,6 +94,12 @@ const Quiz = () => {
 
   if(generatingQuiz) {
     return <BarLoader className='mt-4' width={"100%"} color='gray'/>
+  }
+
+  if (resultData) {
+    return <div className='mx-2'>
+      <QuizResult result = {resultData} onStartNew = {startNewQuiz}/>
+    </div>
   }
 
   if (!quizData) {
@@ -136,16 +152,19 @@ const Quiz = () => {
         </CardContent>
         <CardFooter className="flex justify-between">
 
-          { !showExplanation && 
+          { !showExplanation ? 
             <Button onClick={() => setShowExplanation(true)} variant="outline" disabled={!answers[currentQuestion]}>
               Show Explanation
+            </Button> :
+            <Button onClick={() => setShowExplanation(false)} variant="outline" disabled={!answers[currentQuestion]}>
+              Hide Explanation
             </Button>
           }
            
           <Button className="ml-auto" onClick={handleNext} disabled={!answers[currentQuestion] || savingResult}>
             {savingResult && (
-              <BarLoader className="mt-4" width={"100%"} color="gray" />
-            )}
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />)
+            }
             {currentQuestion < quizData.length - 1 ? "Next Question" : "Submit Quiz"}
           </Button> 
           
