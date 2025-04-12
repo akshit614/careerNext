@@ -1,6 +1,6 @@
 "use client";
 
-import { generateQuiz } from '@/actions/interview';
+import { generateQuiz, saveQuizResult } from '@/actions/interview';
 import useFetch from '@/hooks/useFetch';
 import  { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
@@ -15,6 +15,7 @@ import {
   } from "@/components/ui/card"
 import { Button } from '@/components/ui/button';
 import { BarLoader } from 'react-spinners';
+import { toast } from 'sonner';
 
 
 const Quiz = () => {
@@ -29,6 +30,15 @@ const Quiz = () => {
       data : quizData,
   } = useFetch(generateQuiz)
 
+  const {
+      loading : savingResult,
+      fn : savingResultFn,
+      data : resultData,
+      setData : setResultData 
+  } = useFetch(saveQuizResult)
+  
+  console.log(resultData);
+  
 
   useEffect(() => {
     if(quizData) {
@@ -52,7 +62,25 @@ const Quiz = () => {
     }
   }
 
-  const finishQuiz = () => {}
+  const calculateScore = () => {
+    let count = 0 ;
+    answers.forEach((answer,index) => {
+      if (answer === quizData[index].correctAnswer) {
+        count++;
+      }
+    })
+    return (count / quizData.length) * 100;
+  }
+
+  const finishQuiz = async() => {
+    const score = calculateScore();
+    try {
+      await savingResultFn(quizData, answers, score)
+      toast.success("Quiz Completed!")
+    } catch (error) {
+      toast.error(error.message || "Failed to save the quiz!")
+    }
+  }
 
   if(generatingQuiz) {
     return <BarLoader className='mt-4' width={"100%"} color='gray'/>
@@ -61,19 +89,19 @@ const Quiz = () => {
   if (!quizData) {
       return  <div className='flex justify-center pt-10'>
       <Card className="mx-2 md:max-w-3xl">
-      <CardHeader>
-        <CardTitle>Ready To Test Your Knowledge</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p className='text-muted-foreground'>
-          This quiz contains 10 questions specific to your industry and skills. 
-          Take your time and choose the right answer for each question.
-        </p>
-      </CardContent>
-      <CardFooter>
-        <Button className="w-full" onClick={generateQuizFn}>Start Quiz</Button>
-      </CardFooter>
-    </Card>
+        <CardHeader>
+          <CardTitle>Ready To Test Your Knowledge</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className='text-muted-foreground'>
+            This quiz contains 10 questions specific to your industry and skills. 
+            Take your time and choose the right answer for each question.
+          </p>
+        </CardContent>
+        <CardFooter>
+          <Button className="w-full" onClick={generateQuizFn}>Start Quiz</Button>
+        </CardFooter>
+      </Card>
       </div>
   }
 
@@ -85,8 +113,8 @@ const Quiz = () => {
         <CardHeader>
           <CardTitle>Question {currentQuestion + 1} of {quizData.length}</CardTitle>
         </CardHeader>
-        <CardContent className=" ">
-        <p>Q. {question.question}</p>
+        <CardContent className="space-y-4">
+        <p className='text-lg font-medium'>Q. {question.question}</p>
 
         <RadioGroup onValueChange={handleAnswer} value={answers[currentQuestion]}  className="space-y-2"> 
             {question.options.map((option,index) => {
@@ -106,7 +134,7 @@ const Quiz = () => {
               </div>
             }
         </CardContent>
-        <CardFooter>
+        <CardFooter className="flex justify-between">
 
           { !showExplanation && 
             <Button onClick={() => setShowExplanation(true)} variant="outline" disabled={!answers[currentQuestion]}>
@@ -114,7 +142,10 @@ const Quiz = () => {
             </Button>
           }
            
-          <Button className="ml-auto" onClick={handleNext}>
+          <Button className="ml-auto" onClick={handleNext} disabled={!answers[currentQuestion] || savingResult}>
+            {savingResult && (
+              <BarLoader className="mt-4" width={"100%"} color="gray" />
+            )}
             {currentQuestion < quizData.length - 1 ? "Next Question" : "Submit Quiz"}
           </Button> 
           
