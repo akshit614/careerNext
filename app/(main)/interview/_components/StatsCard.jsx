@@ -1,6 +1,6 @@
 import React from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Brain, Trophy } from 'lucide-react';
+import { Brain, Trophy, SquarePen } from 'lucide-react';
 
 
 const StatsCard = ({assessments}) => {
@@ -55,7 +55,7 @@ const StatsCard = ({assessments}) => {
         <Card >
           <CardHeader className="flex flex-row items-center justify-between space-x-0 ">
             <CardTitle className="text-sm font-medium">Latest Score</CardTitle>
-            <Trophy className="h-4 w-4 text-yellow-300"/>
+            <SquarePen className="h-4 w-4 text-red-500"/>
           </CardHeader>
           <CardContent>
             <div className='text-2xl font-bold'>{getLatestAssessments()?.quizScore.toFixed(1) || 0}%</div>

@@ -15,7 +15,7 @@ const QuizResult = ({result,hideStartNew = false, onStartNew}) => {
             Quiz Result
         </h1>
 
-        <CardContent>
+        <CardContent className="space-y-6">
             {/* Score OverView */}
             <div className='text-center space-y-2'>
                 <h3 className='text-2xl font-bold'>Score {result.quizScore.toFixed(1)}%</h3>

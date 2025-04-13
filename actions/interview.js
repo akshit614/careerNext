@@ -89,30 +89,31 @@ export async function saveQuizResult(questions , answers, score) {
   const wrongAnswers = questionsResults.filter((q) => !q.isCorrect)
 
   let improvementTip = null;
+  if (wrongAnswers.length > 0) {
+    const wrongQuestionsText = wrongAnswers.map((q) => 
+      `Question: "${q.question}"\nCorrect Answer: "${q.answer}"\nUser Answer: "${q.userAnswer}"`
+    ).join("\n\n");
 
-  const wrongQuestionsText = wrongAnswers.map((q) => 
-    `Question: "${q.question}"\nCorrect Answer: "${q.answer}"\nUser Answer: "${q.userAnswer}"`
-  ).join("\n\n");
+    const improvementPrompt = `
+        The user got the following ${user.industry} technical interview questions wrong:
 
-  const improvementPrompt = `
-      The user got the following ${user.industry} technical interview questions wrong:
+        ${wrongQuestionsText}
 
-      ${wrongQuestionsText}
-
-      Based on these mistakes, provide a concise, specific improvement tip.
-      Focus on the knowledge gaps revealed by these wrong answers.
-      Keep the response under 2 sentences and make it encouraging.
-      Don't explicitly mention the mistakes, instead focus on what to learn/practice.
-    `;
-  
-  try {
-    const tipResult = await model.generateContent(improvementPrompt);
-    const improvementTip = tipResult.response.text().trim();
-
-  } catch (error) {
-    console.error("Error generating improvement tip ", error);
+        Based on these mistakes, provide a concise, specific improvement tip.
+        Focus on the knowledge gaps revealed by these wrong answers.
+        Keep the response under 2 sentences and make it encouraging.
+        Don't explicitly mention the mistakes, instead focus on what to learn/practice.
+      `;
     
-  }
+    try {
+      const tipResult = await model.generateContent(improvementPrompt);
+      improvementTip = tipResult.response.text().trim();
+
+    } catch (error) {
+      console.error("Error generating improvement tip ", error);
+      
+    }
+    }
 
   try {
     const assesment = await db.assesments.create({
