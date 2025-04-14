@@ -1,3 +1,5 @@
+"use server";
+
 import { db } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { GoogleGenerativeAI } from "@google/generative-ai";
@@ -35,7 +37,7 @@ export async function saveResume(content) {
             }
         });
 
-        revalidatePath('/resume');
+        revalidatePath("/resume");
         return resume;
 
     } catch (error) {

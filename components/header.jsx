@@ -18,7 +18,7 @@ async function Header() {
   await checkUser();
 
   return (
-    <header className='fixed top-0 w-full border-b bg-background/80 backdrop-blur-md z-50 supports-[backdrop-filter]:bg-background/60 px-10'>
+    <header className='fixed top-0 w-full border-b bg-background/80 backdrop-blur-sm z-50 supports-[backdrop-filter]:bg-background/60 px-10'>
       <nav className='container mx-auto px-4 h-16 flex justify-between items-center'>
           <Link href={'/'}>
           <Image src={'vercel.svg'} alt='Logo' width={200}  height={20} className='h-12 py-1 w-auto object-contain'/>
