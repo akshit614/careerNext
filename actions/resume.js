@@ -104,7 +104,7 @@ export async function improveWithAI({current, type}) {
     `;
 
     try {
-        const result = model.generateContent(prompt);
+        const result = await model.generateContent(prompt);
         const response = result.response;
         const improvedContent = response.text().trim();
 
