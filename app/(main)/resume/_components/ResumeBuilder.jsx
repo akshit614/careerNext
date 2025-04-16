@@ -52,10 +52,6 @@ const ResumeBuilder = ({initialContent}) => {
 
     const formValues = watch();
 
-    const onSubmit = async(data) => {
-
-    }
-
     useEffect(() => {
         if(initialContent) setActiveTab("preview")
     }, [initialContent])
@@ -107,9 +103,39 @@ const ResumeBuilder = ({initialContent}) => {
       .join("\n\n");
   };
 
-  const generatePdf = () => {
-    
-  } 
+  const generatePDF = async () => {
+    setIsGenerating(true);
+    try {
+      const element = document.getElementById("resume-pdf");
+      const opt = {
+        margin: [15, 15],
+        filename: "resume.pdf",
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+      };
+
+      await html2pdf().set(opt).from(element).save();
+    } catch (error) {
+      console.error("PDF generation error:", error);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const onSubmit = async (data) => {
+    try {
+      const formattedContent = previewContent
+        .replace(/\n/g, "\n") // Normalize newlines
+        .replace(/\n\s*\n/g, "\n\n") // Normalize multiple newlines to double newlines
+        .trim();
+
+      console.log(previewContent, formattedContent);
+      await saveResumeFn(previewContent);
+    } catch (error) {
+      console.error("Save error:", error);
+    }
+  };
 
   return (
     <div className='space-y-4'>
