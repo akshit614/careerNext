@@ -15,7 +15,9 @@ import EntryForm from './entryForm';
 import { entriesToMarkdown } from '@/app/lib/helper';
 import MDEditor from '@uiw/react-md-editor';
 import { useUser } from '@clerk/nextjs';
-
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
+// import { html2pdf } from 'html2pdf.js/dist/html2pdf.min.js';
 
 const ResumeBuilder = ({initialContent}) => {
     
@@ -106,7 +108,10 @@ const ResumeBuilder = ({initialContent}) => {
   const generatePDF = async () => {
     setIsGenerating(true);
     try {
-      const element = document.getElementById("resume-pdf");
+      const element = document.getElementById('resume-pdf');
+      console.log(element);   
+      const html2pdfModule = await import("html2pdf.js/dist/html2pdf.bundle.min.js"); 
+      const html2pdf = html2pdfModule.default;
       const opt = {
         margin: [15, 15],
         filename: "resume.pdf",
@@ -143,15 +148,25 @@ const ResumeBuilder = ({initialContent}) => {
             <h1 className='gradient-title font-bold text-5xl md:text-6xl'>Resume Builder</h1>
 
         <div className='space-x-2'>
-            <Button variant="destructive"> 
-                <Save className='h-4 w-4' />
-                Save
+            <Button variant="destructive" onClick={onSubmit} disabled={isSaving}> 
+                
+                {isSaving ? (
+                    <>
+                        <Loader2 className='h-4 w-4 animate-spin'/>
+                        Saving...
+                    </>
+                ) : (
+                    <>
+                        <Save className='h-4 w-4' />
+                        Save
+                    </>
+                )}
             </Button>
-            <Button onClick={generatePdf} disabled={isGenerating}> 
+            <Button onClick={generatePDF} disabled={isGenerating}> 
                 {isGenerating ? (
                     <>
                         <Loader2 className='h-4 w-4 animate-spin'/>
-                        Generating Pdf
+                        Generating Pdf...
                     </>
                 ) : (
                     <>
@@ -330,7 +345,7 @@ const ResumeBuilder = ({initialContent}) => {
                 <MDEditor value={previewContent} onChange={setPreviewContent} height={800} preview={resumeMode}/>
             </div>
             <div className='hidden'>
-            <div id='resume-pdf'>
+            <div id='resume-pdf' style={{ color: "black" }}>
                 <MDEditor.Markdown 
                 source={previewContent}
                 style={{
@@ -345,6 +360,7 @@ const ResumeBuilder = ({initialContent}) => {
 
     </div>
   )
+  
 }
 
 export default ResumeBuilder
