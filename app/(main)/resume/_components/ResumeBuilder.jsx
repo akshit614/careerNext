@@ -17,6 +17,7 @@ import MDEditor from '@uiw/react-md-editor';
 import { useUser } from '@clerk/nextjs';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
+import { toast } from 'sonner';
 // import { html2pdf } from 'html2pdf.js/dist/html2pdf.min.js';
 
 const ResumeBuilder = ({initialContent}) => {
@@ -127,6 +128,15 @@ const ResumeBuilder = ({initialContent}) => {
       setIsGenerating(false);
     }
   };
+
+  useEffect(() => {
+    if(saveResult && !isSaving) {
+        toast.success("Resume saves!")
+    }
+    if(saveError) {
+        toast.error(saveError.message || "Failed to save resume!")
+    }
+  },[saveResult, isSaving, saveError])
 
   const onSubmit = async (data) => {
     try {
