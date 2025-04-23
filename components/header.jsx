@@ -49,7 +49,7 @@ async function Header() {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href={'/ai-cover-letter'} className='flex gap-3 items-center'>
+              <Link href={'/coverletter'} className='flex gap-3 items-center'>
                 <PenBox/> 
                 <span>Cover letter</span> 
               </Link>
