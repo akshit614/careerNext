@@ -16,12 +16,14 @@ import { Textarea } from "@/components/ui/textarea";
 import useFetch from "@/hooks/useFetch";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 
 const CoverLetterGenerator = () => {
+    const router = useRouter();
 
     const {
         register,
@@ -42,6 +44,7 @@ const CoverLetterGenerator = () => {
     useEffect(() => {
         if (generatedLetter) {
         toast.success("Cover letter generated successfully!");
+        router.push(`/coverletter/${generatedLetter.id}`);
         reset();
         }
     }, [generatedLetter]);

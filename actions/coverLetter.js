@@ -12,7 +12,7 @@ const model = genAi.getGenerativeModel({
 export async function createCoverLetter(data) {
     const {userId} = await auth();
 
-    if(!userId) throw new Error("UnAuthorized");
+    if(!userId) throw new Error("Unauthorized");
 
     const user = await db.user.findUnique({
         where : {
@@ -72,3 +72,68 @@ export async function createCoverLetter(data) {
   }
 
 }
+
+
+export async function getCoverLetters() {
+
+  const {userId} = await auth();
+
+    if(!userId) throw new Error("Unauthorized");
+
+    const user = await db.user.findUnique({
+        where : {
+            clerkUserId : userId,
+        }
+    })
+
+    if(!user) throw new Error("User not found!");
+
+    return await db.coverLetter.findMany({
+      where : {
+        userId : user.id,
+      },
+      orderBy :{
+        createdAt : "desc",
+      }
+    })
+}
+
+export async function getCOverLetter(id) {
+
+  const {userId} = await auth();
+
+    if(!userId) throw new Error("Unauthorized");
+
+    const user = await db.user.findUnique({
+        where : {
+            clerkUserId : userId,
+        }
+    })
+
+    if(!user) throw new Error("User not found!");
+
+    return await db.coverLetter.findUnique({
+      where : {
+        id,
+        userId : user.id,
+      },
+    });
+  }
+
+  export async function deleteCoverLetter(id) {
+    const { userId } = await auth();
+    if (!userId) throw new Error("Unauthorized");
+  
+    const user = await db.user.findUnique({
+      where: { clerkUserId: userId },
+    });
+  
+    if (!user) throw new Error("User not found");
+  
+    return await db.coverLetter.delete({
+      where: {
+        id,
+        userId: user.id,
+      },
+    });
+  }
