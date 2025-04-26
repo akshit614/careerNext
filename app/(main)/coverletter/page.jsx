@@ -3,8 +3,13 @@ import { Plus } from 'lucide-react'
 import React from 'react'
 import CoverLetterList from './_components/coverletterList'
 import Link from 'next/link'
+import { getCoverLetters } from '@/actions/coverLetter'
 
-const resumePage = () => {
+
+const resumePage = async () => {
+
+  const coverLetters = await getCoverLetters();
+
   return (
     <div>
         <div className="flex flex-col md:flex-row gap-2 items-center justify-between mb-5 ">
@@ -17,7 +22,7 @@ const resumePage = () => {
             </Link>
         </div>
 
-        <CoverLetterList />
+        <CoverLetterList coverLetterList={coverLetters}/>
     </div>
   )
 }
