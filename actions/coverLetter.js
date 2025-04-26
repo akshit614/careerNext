@@ -98,7 +98,7 @@ export async function getCoverLetters() {
     })
 }
 
-export async function getCOverLetter(id) {
+export async function getCoverLetter(id) {
 
   const {userId} = await auth();
 
