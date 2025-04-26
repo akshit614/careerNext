@@ -7,7 +7,6 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
   } from "@/components/ui/card"
@@ -16,26 +15,44 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea";
 import useFetch from "@/hooks/useFetch";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 
 const CoverLetterGenerator = () => {
-
 
     const {
         register,
         handleSubmit,
         formState: { errors },
         reset,
-      } = useForm({
-        resolver: zodResolver(coverLetterSchema),
-      });
+    } = useForm({
+    resolver: zodResolver(coverLetterSchema),
+    });
 
     const {
     loading: generating,
     fn: generateLetterFn,
     data: generatedLetter,
     } = useFetch(createCoverLetter);
+
+    // Update content when letter is generated
+    useEffect(() => {
+        if (generatedLetter) {
+        toast.success("Cover letter generated successfully!");
+        reset();
+        }
+    }, [generatedLetter]);
+
+    const  onSubmit = async (data) => {
+        try {
+            await generateLetterFn(data);
+        } catch (error) {
+        toast.error(error.message || "Failed to generate cover letter");
+        }
+    }
 
   return (
     <div>
@@ -45,7 +62,7 @@ const CoverLetterGenerator = () => {
                 <CardDescription>Provide information about the position you're applying for</CardDescription>
             </CardHeader>
             <CardContent>
-                <form className="space-y-4">
+                <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
                     <div className="grid md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <Label htmlFor="companyName" >Company Name</Label>
@@ -65,7 +82,7 @@ const CoverLetterGenerator = () => {
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="jobDescription" >Job Description</Label>
-                        <Textarea id="jobDescription" className="h-32" placeholder="Enter job description" {...register("jobTitle")} />
+                        <Textarea id="jobDescription" className="h-32" placeholder="Enter job description" {...register("jobDescription")} />
                         { errors.jobDescription && (
                             <p className="text-sm text-red-500">{errors.jobDescription.message}</p>
                         ) }

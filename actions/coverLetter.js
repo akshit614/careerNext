@@ -9,8 +9,8 @@ const model = genAi.getGenerativeModel({
     model : "gemini-1.5-flash"
 });
 
-export async function createCoverLetter({data}) {
-    const userId = await auth();
+export async function createCoverLetter(data) {
+    const {userId} = await auth();
 
     if(!userId) throw new Error("UnAuthorized");
 
