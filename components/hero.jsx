@@ -32,11 +32,11 @@ export const HeroSection = () => {
         <div className='space-y-6 text-center'>
             <div className='space-y-6 mx-auto'>
                 <h1 className='gradient gradient-title text-5xl md:text-6xl lg:text-7xl xl:text-8xl'>
-                    Your AI Career Coach for <br />
+                    One Stop Solution for <br />
                     Professional Success
                 </h1>
                 <p className='mx-auto max-w-[600px] text-muted-foreground md:text-xl'>
-                    hey welcome to divyanshu's side hustle.
+                    Prepare for Interviews | Create Resume | Ai Powered Insights
                 </p>
             </div>
             <div>
