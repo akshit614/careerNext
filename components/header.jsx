@@ -26,7 +26,7 @@ async function Header() {
           </Link>
         <div className='flex items-center space-x-2 md:space-x-5'>
         <SignedIn>
-          {/* <ModeToggle/> */}
+          <ModeToggle/>
           <Link href={'/onboarding'}> 
           <Button> 
             <LayoutDashboard/> 

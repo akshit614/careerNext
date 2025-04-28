@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Carrier Next",
+  title: "CareerNext",
   description: "Simplified career solutions",
 };
 
